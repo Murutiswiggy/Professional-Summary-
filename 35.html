@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Murali Akkena | AWS Administrator</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1b33;
+      --text:#eaf0ff;
+      --muted:#b9c6e6;
+      --primary:#2563eb;
+      --primary2:#60a5fa;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius:18px;
+      --max:1100px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(37,99,235,.25), transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, rgba(96,165,250,.18), transparent 55%),
+        radial-gradient(900px 700px at 50% 90%, rgba(37,99,235,.12), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit}
+    .wrap{width:100%}
+
+    /* NAV */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.65);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:nowrap; /* keep everything on one row like your screenshot */
+    }
+
+    /* UPDATED BRAND (single line like screenshot) */
+    .brand{
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:13px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      white-space:nowrap;
+      flex:0 0 auto;     /* don't stretch */
+      min-width:auto;    /* remove forced width */
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .brand .sep{opacity:.7; margin:0 4px}
+
+    /* UPDATED LINKS (single line, centered, no wrap) */
+    .links{
+      list-style:none;
+      display:flex;
+      gap:10px;
+      padding:0;
+      margin:0;
+      flex:1;                 /* take remaining space */
+      justify-content:center; /* center like screenshot */
+      flex-wrap:nowrap;       /* single line */
+      white-space:nowrap;     /* single line */
+    }
+    .links li{flex:0 0 auto;}
+    .links a{
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+      padding:10px 10px;
+      border-radius:10px;
+      transition:.2s ease;
+    }
+    .links a:hover{color:var(--text); background: rgba(255,255,255,.06)}
+
+    .nav-cta{
+      font-size:12px;
+      color:var(--muted);
+      text-align:right;
+      line-height:1.25;
+      white-space:nowrap;
+      flex:0 0 auto; /* don't wrap */
+      min-width:auto;
+    }
+    .nav-cta a{color:var(--primary2); text-decoration:none; font-weight:800}
+
+    /* SECTIONS */
+    section{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:64px 18px;
+    }
+    .hdr{margin-bottom:22px}
+    .label{
+      display:inline-block;
+      font-size:12px;
+      letter-spacing:.18em;
+      color:var(--primary2);
+      font-weight:900;
+      margin-bottom:10px;
+    }
+    h2{margin:0; font-size:34px; letter-spacing:-.02em}
+
+    /* HERO */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:26px;
+      align-items:center;
+      padding-top:44px;
+    }
+    .hero-title{
+      margin:0 0 8px 0;
+      font-size:44px;
+      line-height:1.0;
+      letter-spacing:-.03em;
+    }
+    .hero-name{
+      background: linear-gradient(90deg, var(--text), rgba(96,165,250,.95));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero p{margin:0 0 18px 0; color:var(--muted); max-width:62ch; font-size:15px}
+    .meta{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin:14px 0 0;
+    }
+    .pill{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:12px;
+      margin-top:18px;
+    }
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      padding:16px 14px;
+      min-height:92px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .card h3{margin:0; font-size:12px; letter-spacing:.14em; color:var(--muted)}
+    .card .big{font-size:26px; font-weight:900}
+    .card .sub{color:var(--muted); font-size:12px; font-weight:700}
+
+    .photo{
+      width:100%;
+      max-width:360px;
+      aspect-ratio: 4 / 5;
+      border-radius:28px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      margin-left:auto;
+    }
+    .upload{
+      position:absolute; inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:18px;
+      text-align:center;
+      color:var(--muted);
+      border:2px dashed rgba(255,255,255,.16);
+      margin:16px;
+      border-radius:22px;
+      cursor:pointer;
+      transition:.2s ease;
+      z-index:2;
+    }
+    .upload:hover{
+      border-color: rgba(96,165,250,.55);
+      background: rgba(37,99,235,.08);
+      color:var(--text);
+    }
+    .upload svg{width:34px; height:34px}
+    #profileImage{width:100%; height:100%; object-fit:cover; display:none}
+
+    .photo-actions{
+      position:absolute;
+      left:14px; right:14px; bottom:14px;
+      display:flex;
+      gap:10px;
+      justify-content:flex-start;
+      z-index:5;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background: rgba(11,18,32,.55);
+      color:var(--text);
+      font-weight:900;
+      font-size:13px;
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      backdrop-filter: blur(8px);
+    }
+    .btn:hover{border-color: rgba(96,165,250,.55)}
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+    }
+
+    .grid-2{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; align-items:start}
+    .panel{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background: rgba(255,255,255,.03);
+    }
+    .panel h3{margin:0 0 10px 0}
+    .panel p{margin:0; color:var(--muted)}
+    .list{margin:0; padding-left:18px; color:var(--muted)}
+    .list li{margin:6px 0}
+
+    .tags{display:flex; flex-wrap:wrap; gap:8px}
+    .tag{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .timeline{display:flex; flex-direction:column; gap:14px; margin-top:18px}
+    .t-item{display:grid; grid-template-columns: 18px 1fr; gap:12px}
+    .dot{
+      width:12px; height:12px; margin-top:18px;
+      border-radius:999px;
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(37,99,235,.18);
+    }
+    .t-card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background: rgba(255,255,255,.03);
+    }
+    .t-card h3{margin:0 0 6px 0}
+    .when{color:var(--primary2); font-weight:900; font-size:13px}
+    .where{color:var(--muted); font-weight:800; margin:6px 0 10px 0}
+    .t-card ul{margin:0; padding-left:18px; color:var(--muted)}
+    .t-card li{margin:6px 0}
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:12px;
+      margin-top:18px;
+    }
+    .c-card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background: rgba(255,255,255,.03);
+    }
+    .c-card .ico{font-size:22px}
+    .c-card h4{margin:10px 0 8px 0}
+    .c-card a{
+      color:var(--primary2);
+      text-decoration:none;
+      font-weight:900;
+      font-size:13px;
+      word-break:break-word;
+    }
+
+    footer{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:26px 18px 44px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    /* Keep nav on one line; on small screens allow horizontal scroll for the whole nav row */
+    @media (max-width: 980px){
+      .nav-inner{overflow-x:auto; -webkit-overflow-scrolling:touch}
+      .hero{grid-template-columns:1fr; padding-top:26px}
+      .photo{margin-left:0; max-width:420px}
+      .grid-2{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns: repeat(2, minmax(0,1fr))}
+    }
+    @media (max-width: 520px){
+      .hero-title{font-size:36px}
+      .cards{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          AWS Administrator <span class="sep">|</span> Cloud &amp; Network Engineer
+        </div>
+
+        <ul class="links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#summary">Summary</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Project</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          Have any Questions?<br />
+          <a href="mailto:muraliakkena9686@gmail.com">muraliakkena9686@gmail.com</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div>
+        <h1 class="hero-title">Hi, I'm<br /><span class="hero-name">Murali Akkena</span></h1>
+        <p>
+          AWS Administrator with 4 years of IT experience, including 1 year of hands-on experience in AWS and 3 years in
+          Network Administration. Skilled in designing, deploying, and managing scalable and secure cloud infrastructure.
+        </p>
+
+        <div class="meta">
+          <span class="pill">Hyderabad, India</span>
+          <span class="pill">AWS • Networking • Troubleshooting</span>
+          <span class="pill">Open to opportunities</span>
+        </div>
+
+        <div class="cards" aria-label="Highlights">
+          <div class="card">
+            <h3>EXPERIENCE</h3>
+            <div class="big">4+ Years</div>
+            <div class="sub">IT (AWS + Network)</div>
+          </div>
+          <div class="card">
+            <h3>AWS FOCUS</h3>
+            <div class="big">1 Year</div>
+            <div class="sub">Production + Non-Prod</div>
+          </div>
+          <div class="card">
+            <h3>NETWORKING</h3>
+            <div class="big">3 Years</div>
+            <div class="sub">Enterprise (200+ users)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo" id="imageContainer">
+        <div class="upload" id="uploadArea" role="button" tabindex="0" aria-label="Upload profile photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <p>Click or drag to upload photo</p>
+          <input type="file" id="photoInput" accept="image/*" hidden />
+        </div>
+
+        <img id="profileImage" alt="Murali Akkena" />
+
+        <div class="photo-actions" id="photoActions" style="display:none;">
+          <button type="button" class="btn" id="btnChangePhoto">Change photo</button>
+          <button type="button" class="btn btn-ghost" id="btnRemovePhoto">Remove</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section id="summary">
+      <div class="hdr">
+        <span class="label">SUMMARY</span>
+        <h2>Professional Summary</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <p>
+            AWS Administrator with 4 years of IT experience, including 1 year of hands-on experience in AWS and 3 years
+            in Network Administration. Experienced in EC2, VPC, Load Balancers, RDS, Route 53, and CloudWatch with a
+            strong background in networking and troubleshooting real-time production issues.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Quick Info</h3>
+          <ul class="list">
+            <li><strong>Role:</strong> AWS Administrator</li>
+            <li><strong>Location:</strong> Hyderabad, India</li>
+            <li><strong>Email:</strong> muraliakkena9686@gmail.com</li>
+            <li><strong>Phone:</strong> 9948579686</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="hdr">
+        <span class="label">SKILLS</span>
+        <h2>Technical Skills</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>AWS Services</h3>
+          <div class="tags">
+            <span class="tag">EC2</span><span class="tag">AMI</span><span class="tag">Auto Scaling</span>
+            <span class="tag">VPC</span><span class="tag">Subnets</span><span class="tag">Route Tables</span>
+            <span class="tag">Internet Gateway</span><span class="tag">NAT Gateway</span>
+            <span class="tag">S3</span><span class="tag">EBS</span>
+            <span class="tag">ALB</span><span class="tag">Route 53</span><span class="tag">RDS</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Security &amp; IAM</h3>
+          <div class="tags">
+            <span class="tag">IAM Users</span><span class="tag">Roles &amp; Policies</span><span class="tag">MFA</span>
+            <span class="tag">Security Groups</span><span class="tag">NACLs</span><span class="tag">CloudTrail</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Networking</h3>
+          <div class="tags">
+            <span class="tag">TCP/IP</span><span class="tag">DNS</span><span class="tag">DHCP</span>
+            <span class="tag">VLANs</span><span class="tag">Routing</span><span class="tag">Firewalls</span>
+            <span class="tag">Site-to-Site VPN</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Monitoring &amp; Backup</h3>
+          <div class="tags">
+            <span class="tag">CloudWatch (Metrics)</span><span class="tag">CloudWatch Logs</span><span class="tag">Alarms</span>
+            <span class="tag">AWS Backup</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>DevOps &amp; Automation</h3>
+          <div class="tags">
+            <span class="tag">AWS CLI</span><span class="tag">Terraform (Basics)</span><span class="tag">GitHub Actions (CI/CD)</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Strengths</h3>
+          <p>Production support, troubleshooting, secure design, cost optimization, documentation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT -->
+    <section id="projects">
+      <div class="hdr">
+        <span class="label">PROJECT</span>
+        <h2>AWS 3-Tier Architecture Deployment</h2>
+      </div>
+
+      <div class="panel">
+        <ul class="list">
+          <li>Designed and implemented a highly available 3-tier architecture using VPC with public and private subnets.</li>
+          <li>Deployed Application Load Balancer to distribute traffic across EC2 instances.</li>
+          <li>Hosted application on EC2 instances in private subnet for enhanced security.</li>
+          <li>Configured RDS MySQL database in private subnet.</li>
+          <li>Implemented Auto Scaling based on CPU utilization.</li>
+          <li>Configured Route 53 for domain routing to Load Balancer.</li>
+          <li>Monitored infrastructure using CloudWatch metrics and alarms.</li>
+          <li>Troubleshooted real-time issues such as 503 errors and resolved target group health issues.</li>
+          <li>Ensured secure communication using Security Groups and IAM roles.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="hdr">
+        <span class="label">EXPERIENCE</span>
+        <h2>Professional Experience</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="t-item">
+          <div class="dot"></div>
+          <div class="t-card">
+            <h3>AWS Administrator</h3>
+            <div class="when">1 Year</div>
+            <div class="where">Production &amp; Non-Production Environments</div>
+            <ul>
+              <li>Managed AWS production and non-production environments.</li>
+              <li>Configured and maintained EC2 instances and Auto Scaling Groups.</li>
+              <li>Designed VPC architecture including subnets, route tables, IGW, and NAT Gateway.</li>
+              <li>Implemented IAM roles and policies following least privilege principle.</li>
+              <li>Configured Application Load Balancers and Target Groups.</li>
+              <li>Managed S3 buckets with encryption and lifecycle policies.</li>
+              <li>Monitored systems using CloudWatch and configured alarms.</li>
+              <li>Enabled CloudTrail for auditing and compliance.</li>
+              <li>Performed cost optimization by identifying unused resources.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="dot"></div>
+          <div class="t-card">
+            <h3>Network Administrator</h3>
+            <div class="when">3 Years</div>
+            <div class="where">Enterprise Network (200+ users)</div>
+            <ul>
+              <li>Managed enterprise network infrastructure supporting 200+ users.</li>
+              <li>Configured routers, switches, firewalls, and VPN connectivity.</li>
+              <li>Implemented network security and access control policies.</li>
+              <li>Designed and maintained VLANs and routing configurations.</li>
+              <li>Supported remote access and branch connectivity solutions.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education">
+      <div class="hdr">
+        <span class="label">EDUCATION</span>
+        <h2>Education</h2>
+      </div>
+
+      <div class="panel">
+        <h3>Bachelor of Information Technology</h3>
+        <p>Andhra University, Visakhapatnam</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="hdr">
+        <span class="label">CONTACT</span>
+        <h2>Let’s Connect</h2>
+      </div>
+
+      <div class="panel">
+        <p style="margin:0;color:var(--muted)">
+          Want to discuss AWS infrastructure, cloud networking, or production support? Reach out anytime.
+        </p>
+
+        <div class="contact-grid">
+          <div class="c-card">
+            <div class="ico">📧</div>
+            <h4>Email</h4>
+            <a href="mailto:muraliakkena9686@gmail.com">muraliakkena9686@gmail.com</a>
+          </div>
+
+          <div class="c-card">
+            <div class="ico">📱</div>
+            <h4>Phone</h4>
+            <a href="tel:9948579686">9948579686</a>
+          </div>
+
+          <div class="c-card">
+            <div class="ico">📍</div>
+            <h4>Location</h4>
+            <span style="color:var(--muted);font-weight:800;font-size:13px">Hyderabad, India</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p style="margin:0">&copy; <span id="year"></span> Murali Akkena. All rights reserved.</p>
+      <p style="margin:0">Built as a single-file <code>index.html</code> (edit anytime).</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const uploadArea = document.getElementById('uploadArea');
+    const photoInput = document.getElementById('photoInput');
+    const profileImage = document.getElementById('profileImage');
+
+    const photoActions = document.getElementById('photoActions');
+    const btnChangePhoto = document.getElementById('btnChangePhoto');
+    const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+
+    function showEmpty(){
+      profileImage.style.display = 'none';
+      uploadArea.style.display = 'flex';
+      if (photoActions) photoActions.style.display = 'none';
+    }
+
+    function showImage(src){
+      profileImage.src = src;
+      profileImage.style.display = 'block';
+      uploadArea.style.display = 'none';
+      if (photoActions) photoActions.style.display = 'flex';
+    }
+
+    function openPicker(){ photoInput.click(); }
+
+    uploadArea.addEventListener('click', openPicker);
+    uploadArea.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') openPicker();
+    });
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = 'var(--primary)';
+      uploadArea.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.style.borderColor = 'rgba(255,255,255,.16)';
+      uploadArea.style.backgroundColor = 'transparent';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = 'rgba(255,255,255,.16)';
+      uploadArea.style.backgroundColor = 'transparent';
+      const file = e.dataTransfer.files?.[0];
+      if (file) handleImageUpload(file);
+    });
+
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) handleImageUpload(file);
+    });
+
+    if (btnChangePhoto) btnChangePhoto.addEventListener('click', openPicker);
+
+    if (btnRemovePhoto) btnRemovePhoto.addEventListener('click', () => {
+      localStorage.removeItem('profileImage');
+      photoInput.value = '';
+      showEmpty();
+    });
+
+    function handleImageUpload(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const src = e.target.result;
+        localStorage.setItem('profileImage', src);
+        showImage(src);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    window.addEventListener('load', () => {
+      const savedImage = localStorage.getItem('profileImage');
+      if (savedImage) showImage(savedImage);
+      else showEmpty();
+    });
+  </script>
+</body>
+</html>
+```
